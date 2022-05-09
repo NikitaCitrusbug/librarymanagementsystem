@@ -5,7 +5,7 @@ from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     is_librarian = models.BooleanField(default=False)
 
 
