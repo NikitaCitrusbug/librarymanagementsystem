@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login form</title>
+  </head>
+  <body>
+    <div class="container" style="background-color: rgb(180, 171, 171) ;">
+        <br>
+        <center><h1>Login Here</h1></center>
+      <form method="POST" style="font-size: 20px ;">
+        {% csrf_token %}
+        <center>
+            <br>
+          <div>user name : {{ form.username }}</div>
+          <br />
+          <div>password : {{form.password}}</div>
+          <br />
+
+          <div>
+            <h3>Forgot Password???</h3>
+          </div>
+          
+          <button type= "submit" class= "btn btn-success" style="background-color: green; color: white; margin: 20px">
+            Login
+          </button>
+          <div>
+            <h3>Not a member???</h3>
+            <a href="http://127.0.0.1:8000/Signup/" class="btn btn-secondary">Signup now</a>
+          </div>
+          <br>
+        </center>
+      </form>
+    </div>
+  </body>
+</html>
