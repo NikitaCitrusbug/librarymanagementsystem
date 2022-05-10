@@ -7,30 +7,36 @@
     <title>Login form</title>
   </head>
   <body>
-    <div class="container" style="background-color: rgb(180, 171, 171) ;">
-        <br>
-        <center><h1>Login Here</h1></center>
-      <form method="POST" style="font-size: 20px ;">
+    <div class="container" style="background-color: rgb(180, 171, 171)">
+      <br />
+      <center><h1>Login Here</h1></center>
+      <form method="POST" style="font-size: 20px">
         {% csrf_token %}
         <center>
-            <br>
+          <br />
           <div>user name : {{ form.username }}</div>
           <br />
           <div>password : {{form.password}}</div>
           <br />
 
           <div>
-              <a href="#">Forgot Password???</a>
+            <a href="#">Forgot Password???</a>
           </div>
-          
-          <button type= "submit" class= "btn btn-success" style="background-color: green; color: white; margin: 20px">
+
+          <button
+            type="submit"
+            class="btn btn-success"
+            style="background-color: green; color: white; margin: 20px"
+          >
             Login
           </button>
           <div>
             <h3>Not a member???</h3>
-            <a href="http://127.0.0.1:8000/Signup/" class="btn btn-secondary">Signup now</a>
+            <a href="http://127.0.0.1:8000/Signup/" class="btn btn-secondary"
+              >Signup now</a
+            >
           </div>
-          <br>
+          <br />
         </center>
       </form>
     </div>

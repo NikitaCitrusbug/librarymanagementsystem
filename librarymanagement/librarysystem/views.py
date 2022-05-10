@@ -42,7 +42,7 @@ class LoginView(View):
 
     # really low level
     def post(self, request):
-        form = LoginForm(request, data=request.POST)
+        form = LoginForm(request, request.POST)
         if form.is_valid():
             user = authenticate(
                 request,
