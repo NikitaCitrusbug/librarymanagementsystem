@@ -14,14 +14,16 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
-class LoginForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = ['username']
 
-    def save(self,commit=True):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
-        return user
+
+# class LoginForm(UserCreationForm):
+#     class Meta(UserCreationForm.Meta):
+#         model = User
+#         fields = ['username' , 'email']
+
+#     def save(self,commit=True):
+#         user = super().save(commit=False)
+#         if commit:
+#             user.save()
+#         return user
 
