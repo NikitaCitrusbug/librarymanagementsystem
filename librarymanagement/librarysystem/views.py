@@ -17,7 +17,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 
 def home(request):
-    return HttpResponse("<h1>Welcome to The Library</h1>")
+    return render(request, 'home.html')
 
 class Signup(CreateView):
     model=User
@@ -28,11 +28,10 @@ class Signup(CreateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            msg = "successfully"
-            return HttpResponse(msg)
+            return HttpResponseRedirect('/Dashboard/')
+
         else:
-            msg = "error"
-            return HttpResponse(msg)
+            return HttpResponseRedirect('/')
 
 def user_login(request):
     if request.method == 'POST':
@@ -50,6 +49,31 @@ def user_login(request):
 
 def dashboard(request):
     return render(request, 'dashboard.html')
+
+def dashboard1(request):
+    return render(request, 'dashboard1.html')
+
+
+def category(request):
+    return render(request, 'Category.html')
+
+
+def book(request):
+    return render(request, 'book.html')
+
+def issue(request):
+    return render(request, 'issue.html')
+
+def author(request):
+    return render(request, 'author.html')
+
+
+def logout(request):
+    return HttpResponseRedirect('/')
+
+
+def contact(request):
+    return render(request, 'contact.html')
 
 # class LoginView(View):
 #     def get(self, request):
