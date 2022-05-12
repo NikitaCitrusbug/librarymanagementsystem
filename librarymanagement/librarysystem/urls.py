@@ -1,20 +1,25 @@
 from django.urls import path,include
 from django.views.generic import TemplateView
 from . import views
-from .views import Signup
+from .views import  Home , SignupAdmin , SignupMember , Login , Dashboard , CategoryView, BookView, Issue, AuthorView , Contact
 from .models import *
 from django import forms 
 
 urlpatterns = [
-    path('', views.home , name = 'home'),
-    path('Signup/',Signup.as_view(), name='signup'),
-    path('Login/' ,views.user_login, name = 'login'),
-    path('Dashboard/' ,views.dashboard, name = 'dashboard'),
+    path('',Home.as_view() , name = "home"),
+    path('Dashboard/',Dashboard.as_view() , name = "dashboard"),
+    path('Book/',BookView.as_view() , name = "book"),
+    path('Category/',CategoryView.as_view() , name = "category"),
+    path('Issuedbook/',Issue.as_view() , name = "issuedbook"),
+    path('Author/',AuthorView.as_view() , name = "author"),
+    path('ContactUs',Contact.as_view() , name = "contactus"),
+    path('Adminsignup',SignupAdmin.as_view(), name = 'adminsignup'),
+    path('Usersignup',SignupMember.as_view(), name = 'membersignup'),
+    path('Login',Login.as_view(),name='login'),
+    
+    
     path('Dashboard1/' ,views.dashboard1, name = 'dashboard1'),
-    path('Category/' ,views.category, name = 'category'),
-    path('Book/' ,views.book, name = 'book'),
-    path('Author/' ,views.author, name = 'author'),
     path('Logout/',views.logout, name = 'logout'),
-    path('ContactUs',views.contact , name = "contactus"),
-    path('Issuedbook',views.issue, name="issuedbook"),
+    
+    
 ]

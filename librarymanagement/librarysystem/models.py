@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     is_librarian = models.BooleanField(default=False)
+    is_member = models.BooleanField(default=True)
 
 
 

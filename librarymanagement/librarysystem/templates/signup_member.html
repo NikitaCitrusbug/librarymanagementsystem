@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup form</title>
-  </head>
-  <body>
+<title>User Signup</title>
+{% extends 'base1.html' %} {% load static %} {% block content %}
     <div class="container" style="background-color: rgb(180, 171, 171) ;">
         <br>
-        <center><h1>Registration Form</h1></center>
+        <center><h1>Registration Form For User</h1></center>
       <form method="POST" style="font-size: 20px ;">
         {% csrf_token %}
         <center>
@@ -39,5 +32,4 @@
         </center>
       </form>
     </div>
-  </body>
-</html>
+    {% endblock content %}

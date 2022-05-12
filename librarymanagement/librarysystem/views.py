@@ -4,107 +4,123 @@ from django.shortcuts import render
 
 # Create your views here.
 from urllib import request
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView 
 from django.shortcuts import render , redirect , reverse
 from django import forms
 from librarysystem import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from librarysystem.models import User, AbstractUser
-from librarysystem.forms import CustomUserCreationForm
+from librarysystem.forms import CustomUserCreationForm , LoginForm
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import check_password
 
 
-def home(request):
-    return render(request, 'home.html')
 
-class Signup(CreateView):
-    model=User
-    form_class = CustomUserCreationForm
-    template_name = 'user_form.html'
-
-    def post(self,request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/Dashboard/')
-
-        else:
-            return HttpResponseRedirect('/')
-
-def user_login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request=request, data = request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username , password = password)
-            if user is not None:
-                login(request,user)
-                return HttpResponseRedirect('/Dashboard/')
-    else:
-        form = AuthenticationForm()
-    return render(request,'login.html', {'form' : form})
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
-def dashboard1(request):
-    return render(request, 'dashboard1.html')
+class Home(View):
+    template_name = 'home.html'
+    def get(self,request):
+        return render(request,self.template_name)
 
 
-def category(request):
-    return render(request, 'Category.html')
+class Dashboard(View):
+    template_name = 'dashboard.html'
+    def get(self,request):
+        return render(request,self.template_name)
 
+class CategoryView(View):
+    template_name = 'Category.html'
+    def get(self,request):
+        return render(request,self.template_name)
 
-def book(request):
-    return render(request, 'book.html')
+class BookView(View):
+    template_name = 'book.html'
+    def get(self,request):
+        return render(request,self.template_name)
 
-def issue(request):
-    return render(request, 'issue.html')
+class Issue(View):
+    template_name = 'issue.html'
+    def get(self,request):
+        return render(request,self.template_name)
 
-def author(request):
-    return render(request, 'author.html')
+class AuthorView(View):
+    template_name = 'author.html'
+    def get(self,request):
+        return render(request,self.template_name)
+
+class Contact(View):
+    template_name = 'contact.html'
+    def get(self,request):
+        return render(request,self.template_name)
 
 
 def logout(request):
     return HttpResponseRedirect('/')
 
+def dashboard1(request):
+    return render(request, 'dashboard1.html')
 
-def contact(request):
-    return render(request, 'contact.html')
 
-# class LoginView(View):
-#     def get(self, request):
-#         return render(request, 'login.html', { 'form':  LoginForm })
 
-#     # really low level
-#     def post(self, request):
-#         form = LoginForm(request, request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 request,
-#                 username=form.cleaned_data.get('username'),
-#                 password=form.cleaned_data.get('password'),
-#                 email=form.cleaned_data.get('email')
-#             )
+class SignupAdmin(CreateView):
+    model=User
+    form_class = CustomUserCreationForm
+    template_name = 'signup_admin.html'
 
-#             if user is None:
-#                 return render(
-#                     request,
-#                     'login.html',
-#                     { 'form': form, 'invalid_creds': True }
-#                 )
+    def post(self,request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            msg = "successfully"
+            return HttpResponse(msg)
+        else:
+            msg = "error"
+            return HttpResponse(msg)
 
-#             try:
-#                 form.confirm_login_allowed(user)
-#             except forms.ValidationError:
-#                 return render(
-#                     request,
-#                     'login.html',
-#                     { 'form': form, 'invalid_creds': True }
-#                 )
-#             login(request, user)
 
-#             return redirect(reverse('user_form'))
+class SignupMember(CreateView):
+    model=User
+    form_class = CustomUserCreationForm
+    template_name = 'signup_member.html'
+
+    def post(self,request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            msg = "successfully"
+            return HttpResponse(msg)
+        else:
+            msg = "error"
+            return HttpResponse(msg)
+
+
+class Login(View):
+    model=User
+    form_class = LoginForm
+    template_name = 'login.html'
+    def get(self,request):
+        form=self.form_class(request.POST)
+        return render(request,self.template_name,{'form' : form})
+
+
+    def post(self,request):
+        username = request.POST['username']
+        password=request.POST['password']
+        pwd=User.objects.get(username=username)
+        password=pwd.password
+        valid = check_password(password,password)
+        
+            
+
+        user=User.objects.get(username=username)
+        if user.is_authenticated:
+
+            if user.is_librarian == True:
+                login(request, user)
+                return  HttpResponse("admin login")
+            else:
+                login(request,user)
+                return  HttpResponse("member login")
+        else:
+            return HttpResponse("invalid login")
