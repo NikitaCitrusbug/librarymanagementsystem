@@ -1,20 +1,26 @@
 import http
+from multiprocessing import context
 from re import template
 from django.shortcuts import render
 
 # Create your views here.
 from urllib import request
-from django.views.generic import View, CreateView 
+from django.views.generic import View, CreateView , TemplateView
 from django.shortcuts import render , redirect , reverse
 from django import forms
 from librarysystem import forms
 from django.http import HttpResponse, HttpResponseRedirect
-from librarysystem.models import User, AbstractUser
-from librarysystem.forms import CustomUserCreationForm , LoginForm
+from librarysystem.models import Author, Category, User, AbstractUser , Book
+from librarysystem.forms import AddForm, CustomUserCreationForm , LoginForm , AddCategoryForm , AddAuthorForm
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import check_password
+from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView 
+
 
 
 
@@ -29,25 +35,97 @@ class Dashboard(View):
     def get(self,request):
         return render(request,self.template_name)
 
-class CategoryView(View):
-    template_name = 'Category.html'
+
+
+class BookView(View):
+    template_name = 'book/book.html'
     def get(self,request):
         return render(request,self.template_name)
 
-class BookView(View):
-    template_name = 'book.html'
+class AddBook(CreateView):
+    model=Book
+    form_class = AddForm
+    template_name = 'book/add_book.html'
+
+    def post(self,request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+        else:
+            return HttpResponse('error')
+
+class BookRetrieve(ListView):
+    model = Book
+
+class BookDetail(DetailView):  
+    model = Book
+
+class BookUpdate(UpdateView):  
+    model = Book
+
+class CategoryView(View):
+    template_name = 'category/Category.html'
     def get(self,request):
         return render(request,self.template_name)
+
+class AddCategory(CreateView):
+    model=Category
+    form_class = AddCategoryForm
+    template_name = 'category/add_category.html'
+
+    def post(self,request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('add category')
+        else:
+            return HttpResponse('error')
+
+class CategoryRetrieve(ListView):
+    model = Category
+
+class CategoryDetail(DetailView):  
+    model = Category
+
+class CategoryUpdate(UpdateView):  
+    model = Category 
+
+class AuthorView(View):
+    template_name = 'author/author.html'
+    def get(self,request):
+        return render(request,self.template_name)
+
+class AddAuthor(CreateView):
+    model= Author
+    form_class = AddAuthorForm
+    template_name = 'author/add_author.html'
+
+    def post(self,request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('add author')
+        else:
+            return HttpResponse('error')
+
+class AuthorRetrieve(ListView):
+    model = Author
+
+class AuthorDetail(DetailView):  
+    model = Author
+
+class AuthorUpdate(UpdateView):  
+    model = Author
+
+
 
 class Issue(View):
     template_name = 'issue.html'
     def get(self,request):
         return render(request,self.template_name)
 
-class AuthorView(View):
-    template_name = 'author.html'
-    def get(self,request):
-        return render(request,self.template_name)
+
 
 class Contact(View):
     template_name = 'contact.html'
@@ -64,7 +142,7 @@ def dashboard1(request):
 
 
 class SignupAdmin(CreateView):
-    model=User
+    model=AbstractUser
     form_class = CustomUserCreationForm
     template_name = 'signup_admin.html'
 
@@ -72,11 +150,11 @@ class SignupAdmin(CreateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            msg = "successfully"
-            return HttpResponse(msg)
+            
+            return HttpResponseRedirect('/Dashboard1/')
         else:
-            msg = "error"
-            return HttpResponse(msg)
+            
+            return HttpResponseRedirect('/')
 
 
 class SignupMember(CreateView):
@@ -88,11 +166,9 @@ class SignupMember(CreateView):
         form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
-            msg = "successfully"
-            return HttpResponse(msg)
+            return HttpResponseRedirect('/Dashboard/')
         else:
-            msg = "error"
-            return HttpResponse(msg)
+            return HttpResponseRedirect('/')
 
 
 class Login(View):
@@ -118,9 +194,9 @@ class Login(View):
 
             if user.is_librarian == True:
                 login(request, user)
-                return  HttpResponse("admin login")
+                return  HttpResponseRedirect('/Dashboard1/')
             else:
                 login(request,user)
-                return  HttpResponse("member login")
+                return  HttpResponseRedirect('/Dashboard/')
         else:
             return HttpResponse("invalid login")
