@@ -10,6 +10,19 @@ class CustomUserCreationForm(UserCreationForm):
 
     def save(self,commit=True):
         user = super().save(commit=False)
+        user.is_librarian = True
+        if commit:
+            user.save()
+        return user
+
+class CustomMemberCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ['username', 'first_name', 'last_name','email']
+
+    def save(self,commit=True):
+        user = super().save(commit=False)
+        user.is_member = True
         if commit:
             user.save()
         return user
@@ -17,7 +30,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class LoginForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
         fields = ['username' , 'password']
 

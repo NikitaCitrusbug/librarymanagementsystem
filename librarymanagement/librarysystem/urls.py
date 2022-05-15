@@ -24,12 +24,12 @@ urlpatterns = [
     path('Addauthor/',AddAuthor.as_view() , name = "addauthor"),
 
     path('retrieve/',BookRetrieve.as_view() , name = "bookretrieve"),
-    path('retrieve/',AuthorRetrieve.as_view() , name = "authorretrieve"),
-    path('retrieve/',CategoryRetrieve.as_view() , name = "categoryretrieve"),
+    path('retrieve/as',AuthorRetrieve.as_view() , name = "authorretrieve"),
+    path('retrieve/adad',CategoryRetrieve.as_view() , name = "categoryretrieve"),
 
-    path('retrieve/<int:pk>', views.BookDetail.as_view(), name = 'bookdetail'),
-    path('retrieve/<int:pk>', views.AuthorDetail.as_view(), name = 'authordetail'),
-    path('retrieve/<int:pk>', views.CategoryDetail.as_view(), name = 'categorydetail'),
+    path('retrieve/da<int:pk>', views.BookDetail.as_view(), name = 'bookdetail'),
+    path('retrieve/asda<int:pk>', views.AuthorDetail.as_view(), name = 'authordetail'),
+    path('retrieve/asda<int:pk>', views.CategoryDetail.as_view(), name = 'categorydetail'),
 
     path('<int:pk>/update/', views.BookUpdate.as_view(), name = 'bookupdate'),
     path('<int:pk>/update/', views.AuthorUpdate.as_view(), name = 'authorupdate'),

@@ -11,7 +11,7 @@ from django import forms
 from librarysystem import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from librarysystem.models import Author, Category, User, AbstractUser , Book
-from librarysystem.forms import AddForm, CustomUserCreationForm , LoginForm , AddCategoryForm , AddAuthorForm
+from librarysystem.forms import AddForm, CustomUserCreationForm , LoginForm , AddCategoryForm , AddAuthorForm , CustomMemberCreationForm
 from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.forms import AuthenticationForm
@@ -57,6 +57,7 @@ class AddBook(CreateView):
 
 class BookRetrieve(ListView):
     model = Book
+    template_name = 'book/book_list.html'
 
 class BookDetail(DetailView):  
     model = Book
@@ -142,7 +143,7 @@ def dashboard1(request):
 
 
 class SignupAdmin(CreateView):
-    model=AbstractUser
+    model=User
     form_class = CustomUserCreationForm
     template_name = 'signup_admin.html'
 
@@ -159,7 +160,7 @@ class SignupAdmin(CreateView):
 
 class SignupMember(CreateView):
     model=User
-    form_class = CustomUserCreationForm
+    form_class = CustomMemberCreationForm
     template_name = 'signup_member.html'
 
     def post(self,request):
@@ -172,6 +173,43 @@ class SignupMember(CreateView):
 
 
 class Login(View):
+#     model=User
+#     form_class = LoginForm
+#     def get(self,request):
+#         form = self.form_class
+#         return render(request,'login.html',{'form' : form})
+
+
+#     def post(self,request):
+#         username=request.POST['username']
+#         password=request.POST['password']
+#         print(password)
+#         pwd=User.objects.get(username=username)
+#         print(username)
+#         password=pwd.password
+#         print(password)
+#         valid = check_password(password,password)
+#         print(valid)
+        
+#         if not valid:
+#             return  HttpResponse("incorrect password")
+            
+
+#         user=User.objects.get(username=username) 
+#         if user.is_authenticated:
+
+#             if user.is_librarian == True:
+#                 login(request, user)
+#                 return render(request,'dashboard1.html')
+#             else:
+#                 login(request,user)
+#                 return render(request,'dashboard.html') 
+#         else:
+#             return HttpResponse("invalid login")
+
+
+
+
     model=User
     form_class = LoginForm
     template_name = 'login.html'
@@ -182,12 +220,16 @@ class Login(View):
 
     def post(self,request):
         username = request.POST['username']
-        password=request.POST['password']
-        pwd=User.objects.get(username=username)
+        passw =request.POST['password']
+        # print(username,passw)
+        pwd = User.objects.get(username=username)
+        # a = User.objects.all()
+        print('data',pwd)
         password=pwd.password
-        valid = check_password(password,password)
+        valid = check_password(passw,password)
         
-            
+        if not valid:
+            return  HttpResponse("incorrect password")
 
         user=User.objects.get(username=username)
         if user.is_authenticated:
@@ -199,4 +241,5 @@ class Login(View):
                 login(request,user)
                 return  HttpResponseRedirect('/Dashboard/')
         else:
-            return HttpResponse("invalid login")
+            msg = "invalid login"
+            return HttpResponse(msg)
